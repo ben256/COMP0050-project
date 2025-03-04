@@ -2,6 +2,7 @@ import logging
 
 import numpy as np
 from numba import njit
+from tqdm import tqdm
 
 
 def energy(order, C, cutoff):
@@ -53,7 +54,17 @@ def energy_numba(order, C, cutoff):
     return total
 
 
-def simulated_annealing_ordering(C, cutoff=0.1, initial_temp=1.0, cooling_rate=0.9999, iterations=500000, tol=5, patience=1000, return_history=False):
+def simulated_annealing_ordering(
+        C,
+        cutoff=0.1,
+        initial_temp=1.0,
+        cooling_rate=0.9999,
+        iterations=500000,
+        tol=5,
+        patience=1000,
+        return_history=False,
+        individual_logging=False
+):
     """
     Perform simulated annealing to optimise the ordering for block-diagonality.
 
@@ -82,6 +93,9 @@ def simulated_annealing_ordering(C, cutoff=0.1, initial_temp=1.0, cooling_rate=0
 
     # Count iterations with negligible change.
     no_change_count = 0
+
+    if individual_logging:
+        progress_bar = tqdm(total=iterations)
 
     for it in range(iterations):
         # Propose a new ordering by removing one element and inserting it elsewhere.
@@ -116,7 +130,13 @@ def simulated_annealing_ordering(C, cutoff=0.1, initial_temp=1.0, cooling_rate=0
             logging.info(f"Converged at iteration {it}")
             break
 
+        if individual_logging:
+            progress_bar.update(1)
+
+    if individual_logging:
+        progress_bar.close()
+
     if return_history:
-        return best_order, best_energy, energy_history, it or 0
+        return best_order, best_energy, it or 0, energy_history
 
     return best_order, best_energy, it or 0

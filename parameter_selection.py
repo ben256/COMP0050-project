@@ -7,10 +7,12 @@ from tqdm import tqdm
 from annealing import simulated_annealing_ordering
 from correlation import *
 from data_processing import *
-from metrics import compute_log_returns
+from utils import *
 
 
 def run_parameter_selection():
+
+    tuning_folder = create_output_folder('./output', 'tuning')
 
     prices, stock_info = fetch_data(
         sector_stock_count=50,
@@ -30,10 +32,19 @@ def run_parameter_selection():
     correlation_matrix = compute_correlation_matrix(log_returns)
     corr_eigenvalues, corr_eigenvectors = compute_eigenvalues(correlation_matrix)
 
-    N_g_values = [13, 15, 17, 18, 19, 20, 21, 23, 25, 32]
-    intial_temperatures = [0.5, 1, 2]
+    N_g_values = [7, 8, 9, 10, 11, 12, 13]
+    intial_temperatures = [0.2, 0.4, 0.6, 0.8, 1.0]
     cooling_rates = [0.9995, 0.9999, 0.99999]
     cut_offs = [0.1, 0.15, 0.2]
+
+    ranges = {
+        "N_g": N_g_values,
+        "initial_temperature": intial_temperatures,
+        "cooling_rate": cooling_rates,
+        "cut_off": cut_offs
+    }
+    with open(f'{tuning_folder}/ranges.json', 'w') as f:
+        json.dump(ranges, f)
 
     combinations = len(N_g_values) * len(intial_temperatures) * len(cooling_rates) * len(cut_offs)
 
@@ -70,5 +81,5 @@ def run_parameter_selection():
         logging.error(f'Error: {e}')
 
     logging.info(f'Saving output to JSON')
-    with open('./output/parameter_selection_output.json', 'w') as f:
+    with open(f'{tuning_folder}/parameter_selection_output.json', 'w') as f:
         json.dump(output, f)
