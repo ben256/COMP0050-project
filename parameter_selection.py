@@ -1,13 +1,12 @@
 import itertools
 import json
-import logging
 
 from tqdm import tqdm
 
-from annealing import simulated_annealing_ordering
-from correlation import *
-from data_processing import *
-from utils import *
+from lib.annealing import simulated_annealing_ordering
+from lib.correlation import *
+from lib.data_processing import *
+from lib.utils import *
 
 
 def run_parameter_selection():

@@ -1,8 +1,8 @@
-from annealing import simulated_annealing_ordering
-from correlation import *
-from data_processing import *
-from graphs import *
-from utils import *
+from lib.annealing import simulated_annealing_ordering
+from lib.correlation import *
+from lib.data_processing import *
+from lib.graphs import *
+from lib.utils import *
 
 
 def run_group_correlation(

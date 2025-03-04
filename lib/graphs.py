@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-from utils import normalise, find_best_energies
+from lib.utils import normalise, find_best_energies
 
 
 def plot_energy_history(energy_history, output_dir):
