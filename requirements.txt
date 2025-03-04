@@ -1,0 +1,6 @@
+numpy~=2.1.2
+tqdm~=4.67.1
+pandas~=2.2.3
+yfinance~=0.2.54
+fonttools~=4.54.1
+matplotlib~=3.9.2
